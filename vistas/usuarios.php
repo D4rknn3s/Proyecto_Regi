@@ -18,7 +18,7 @@ session_start();
 </head>
 
 <body>
-
+ 
   <div class="cabecera">
     <div class="lineas"></div>
       <header>Administración de usuarios</header>
@@ -94,15 +94,6 @@ session_start();
                     <label for="tele_usuario">Teléfono</label>
               </div>
 
-             <!-- <div class="col-md-5 input-field">
-                    <input type="text" class="input" id="casa" required="" autocomplete="off">
-                    <label for="casa">No. de casa</label> 
-              </div>
-
-              <div class="col-md-5 input-field">
-                    <input type="text" class="input" id="cuadra" required="">
-                    <label for="cuadra">No. de cuadra</label>
-              </div>-->
 
               <div class="col-md-5 input-field">
                     <input type="text" class="input" id="correo_usuario" name="correo_usuario" required="" autocomplete="off">
@@ -168,40 +159,41 @@ session_start();
 
             <tbody>
               <tr class="celdas">
-                <?php
-            include '../php/conexion.php';
-                            // Consulta para obtener los datos de los usuarios
-                            $sql = "SELECT usuarios.idusuario, usuarios.nombre_usuario, usuarios.contra_usuario, usuarios.correo_usuario, usuarios.tele_usuario,
-                            usuarios.direccion_usuario, usuarios.Habilitar_desahabilitar, estado.estado, usuarios.apellido_usuario,
-                            usuarios.identidad_usuario, usuarios.apodo_usuario
-                     FROM usuarios
-                     INNER JOIN estado ON usuarios.idestado = estado.idestado;";
-                            $result = $conexion->query($sql);
+              <?php
+include '../php/conexion.php';
 
-                            // Mostrar los datos de los usuarios en la tabla
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row["idusuario"] . "</td>";
-                                    echo "<td>" . $row["nombre_usuario"] . " " . $row["apellido_usuario"] . "</td>";
-                                    echo "<td>" . $row["apodo_usuario"] . "</td>";
-                                    echo "<td>Rol</td>"; // Reemplazar "Rol" por el campo correspondiente en tu base de datos
-                                    echo "<td>" . $row["correo_usuario"] . "</td>";
-                                    echo "<td>" . $row["tele_usuario"] . "</td>";
-                                    echo "<td>" . $row["direccion_usuario"] . "</td>";
-                                    echo "<td>" . $row["estado"] . "</td>";
-                                    //echo "<td>" . $row["Habilitar_desahabilitar"] . "</td>";
-                                    echo "<td><button type='button' class='btn btn-warning btn-sm' style='width: 100%;' data-toggle='modal' data-target='#myModalEdit' onclick='abrirModalEditar(" . $row["idusuario"] . ", \"" . $row["nombre_usuario"] . "\", \"" . $row["apellido_usuario"] . "\", \"" . $row["identidad_usuario"] . "\", \"" . $row["direccion_usuario"] . "\", \"" . $row["tele_usuario"] . "\", \"" . $row["correo_usuario"] . "\", \"" . $row["apodo_usuario"] . "\")'>Editar</button></td>";
-                                    echo "<td><div class='form-check form-switch'>";
-                                    echo "<input class='form-check-input text-center' type='checkbox' role='switch' id='flexSwitchCheckDefault'>";
-                                    echo "<label class='form-check-label' for='flexSwitchCheckDefault'>Configurar</label>";
-                                    echo "</div></td>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='10'>No se encontraron resultados</td></tr>";
-                            }
-                            $conexion->close();
-                            ?>
+// Consulta para obtener los datos de los usuarios
+$sql = "SELECT u.idusuario, u.nombre_usuario, u.apellido_usuario, u.apodo_usuario, u.correo_usuario, u.tele_usuario, u.direccion_usuario, e.estado, r.nombre_rol
+        FROM usuarios u
+        INNER JOIN estados e ON u.idestado = e.idestado
+        INNER JOIN roles r ON u.idrol = r.idrol";
+
+$result = $conexion->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row["idusuario"] . "</td>";
+        echo "<td>" . $row["nombre_usuario"] . " " . $row["apellido_usuario"] . "</td>";
+        echo "<td>" . $row["apodo_usuario"] . "</td>";
+        echo "<td>" . $row["nombre_rol"] . "</td>";
+        echo "<td>" . $row["correo_usuario"] . "</td>";
+        echo "<td>" . $row["tele_usuario"] . "</td>";
+        echo "<td>" . $row["direccion_usuario"] . "</td>";
+        echo "<td>" . $row["estado"] . "</td>";
+        $identidad_usuario = isset($row["identidad_usuario"]) ? $row["identidad_usuario"] : '';
+        echo "<td><button type='button' class='btn btn-warning btn-sm' style='width: 100%;' data-toggle='modal' data-target='#myModalEdit' onclick='abrirModalEditar(" . $row["idusuario"] . ", \"" . $row["nombre_usuario"] . "\", \"" . $row["apellido_usuario"] . "\", \"" . $identidad_usuario . "\", \"" . $row["direccion_usuario"] . "\", \"" . $row["tele_usuario"] . "\", \"" . $row["correo_usuario"] . "\", \"" . $row["apodo_usuario"] . "\")'>Editar</button></td>";
+        echo "<td><div class='form-check form-switch'>";
+        echo "<input class='form-check-input text-center' type='checkbox' role='switch' id='flexSwitchCheckDefault'>";
+        echo "<label class='form-check-label' for='flexSwitchCheckDefault'>Configurar</label>";
+        echo "</div></td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='10'>No se encontraron resultados</td></tr>";
+}
+$conexion->close();
+?>
 
 
 
@@ -217,7 +209,7 @@ session_start();
                       <div class="modal-content ">
             
                         <!-- Encabezado del modal -->
-                        <form action="../model/editar_usuario.php" method="POST">
+                        <form id="formEditarUsuario" action="../model/editar_usuario.php" method="POST">
                         <div class="modal-header">
                           <h4 class="modal-title text-center">Editando usuarios</h4>
                           
@@ -227,12 +219,12 @@ session_start();
                         <div class="modal-body input-box">
                           
                           <div class="col-md-5 input-field">
-                            <input type="text" class="input" id="nombre_usuario" name="nombre_usuario" required="" autocomplete="off">
+                          <input type="text" class="input" id="nombre_usuario_edit" name="nombre_usuario" required="" autocomplete="off">
                             <label for="nombre_usuario">Nombre</label> 
                           </div>
 
                           <div class="col-md-5 input-field">
-                            <input type="text" class="input" id="apellido_usuario" name="apellido_usuario" required="" autocomplete="off">
+                          <input type="text" class="input" id="apellido_usuario_edit" name="apellido_usuario" required="" autocomplete="off">
                             <label for="apellido_usuario">Apellido</label> 
                           </div>
             
@@ -260,17 +252,7 @@ session_start();
                                 <input type="text" class="input" id="apodo_usuario" name="apodo_usuario" required="">
                                 <label for="apodo_usuario">Nombre de usuario</label>
                           </div>
-            
-                          <!--<div class="col-md-5 input-field">
-                                <input type="password" class="input" id="contra_usuario" name="contra_usuario" required="">
-                                <label for="contra_usuario">Contraseña</label>
-                          </div>
-            
-                          <div class="col-md-5 input-field">
-                          <input type="password" class="input" id="contra_usuario" name="contra_usuario" pattern=".{8,32}" title="Debe contener al menos 8 caracteres, una mayúscula, un número y un carácter especial" required="">
-                         <label for="contra_usuario">Confirmar contraseña</label>
-                          </div>-->
-            
+          
             
                         </div>
             
@@ -282,6 +264,7 @@ session_start();
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         </div>
                           </form>
+                          
                       </div>
                     </div>
                   </div>
@@ -325,46 +308,12 @@ session_start();
         document.getElementById("tele_usuario").value = tele_usuario;
         document.getElementById("correo_usuario").value = correo_usuario;
         document.getElementById("apodo_usuario").value = apodo_usuario;
-
-        $('#myModalEdit').modal('show'); // Mostrar el modal de edición
+        
     }
 </script>
 
 
-<script>
-    $(document).ready(function() {
-        $("#myModalEdit").on("submit", function(event) {
-            event.preventDefault();
 
-            $.ajax({
-                url: "../model/editar_usuario.php",
-                method: "POST",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response == "success") {
-                        Swal.fire({
-                            title: "Campos actualizado correctamente",
-                            text: "Los Campos se ha actualizado correctamente.",
-                            icon: "success",
-                            showCancelButton: false,
-                            confirmButtonText: "Cerrar"
-                        }).then(function() {
-                            $("#myModalEdit").modal("hide");
-                            location.reload(); // Recarga la página
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Error",
-                            text: "Hubo un problema al actualizar los cmapos.",
-                            icon: "error",
-                            confirmButtonText: "Cerrar"
-                        }).then(function() {
-                            location.reload(); // Recarga la página
-                        });
-                    }
-                }
-            });
-        });
-    });
-</script>
+
+
 </html>

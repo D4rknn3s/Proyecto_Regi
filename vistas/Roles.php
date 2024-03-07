@@ -111,20 +111,25 @@ session_start();
           
           // Verificar si se encontraron resultados
           if ($result->num_rows > 0) {
-              // Mostrar los roles en una tabla, por ejemplo
-              while($row = $result->fetch_assoc()) {
-                  echo "<tr>";
-                  echo "<th ><input class='form-check-input' type='checkbox' id='checkboxNoLabel' value='" . $row["idrol"] . "' aria-label='...'> " . $row["idrol"] . "</th>";
-                  echo "<th>" . $row["nombre_rol"] . "</th>";
-                  echo "<th>" . $row["desc_rol"] . "</th>";
-                  echo "<th>" . $row["fecha_rol"] . "</th>";
-                  echo "<th>" . $row["creado_por"] . "</th>";
-                  echo "</tr>";
-              }
-              echo "</table>";
-          } else {
-              echo "No se encontraron roles.";
-          }
+            while($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<th ><input class='form-check-input' type='checkbox' id='checkboxNoLabel' value='" . $row["idrol"] . "' aria-label='...'> " . $row["idrol"] . "</th>";
+                echo "<th>" . $row["nombre_rol"] . "</th>";
+                echo "<th>" . $row["desc_rol"] . "</th>";
+                echo "<th>" . $row["fecha_rol"] . "</th>";
+                // Verificar si la clave "creado_por" existe en el array antes de intentar acceder a ella
+                if (array_key_exists("creado_por", $row)) {
+                    echo "<th>" . $row["creado_por"] . "</th>";
+                } else {
+                    echo "<th>NA</th>"; // Otra acción si la clave no existe
+                }
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "No se encontraron roles.";
+        }
+        
           
           // Cerrar la conexión
           $conexion->close();
@@ -140,7 +145,24 @@ session_start();
   </div>
 
   
-  
+  <script>
+    function eliminarRol(idRol) {
+      if (confirm("¿Está seguro de que desea eliminar este rol?")) {
+        // Enviar una solicitud POST AJAX para eliminar el rol
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "eliminar_rol.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            // Actualizar la página o mostrar un mensaje de éxito
+            alert(xhr.responseText);
+            location.reload();
+          }
+        };
+        xhr.send("idrol=" + idRol);
+      }
+    }
+  </script>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
