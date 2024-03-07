@@ -35,7 +35,7 @@ session_start();
           <i class="bi bi-collection"></i></i>Servicios
         </a>
         <div class="dropdown-menu dropdown-menu-custom " aria-labelledby="dropdownLeft1">
-          <a class="dropdown-item" href="#">Pago de seguridad</a>
+          <a class="dropdown-item" href="../model/agregar_pago.php">Agregar pago</a>
           <a class="dropdown-item" href="#">Agregar servicio</a>
         </div>
       </li>
@@ -45,7 +45,7 @@ session_start();
           <i class="bi bi-bar-chart-line"></i>Estadisticas
         </a>
         <div class="dropdown-menu dropdown-menu-custom " aria-labelledby="dropdownLeft2">
-          <a class="dropdown-item" href="#">Historial de pago</a>
+          <a class="dropdown-item" href="../vistas/Pagos.php">Historial de pago</a>
           <a class="dropdown-item" href="#">Deudores</a>
           <a class="dropdown-item" href="#">Pagados</a>
         </div>
