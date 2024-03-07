@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{
+    font-family: 'century gothic', sans-serif;
+}
+.collapse{
+  color: #fff;
+}
+
+.navbar{
+  background-color: #052659;
+  margin: 15px;
+  border-radius: 10px;
+}
+
+
+.navbar-nav .nav-link {
+  color: #fff;
+
+}
+.navbar-nav .dropdown-menu {
+  width: 200px; 
+}
+
+
+.navbar-nav .nav-item {
+  margin-right: 10px; 
+  padding: 1px;
+  font-weight: 700;
+}
+
+.navbar-toggler {
+  background-color: #d1d1d1; 
+  border-color: #ffffff;
+  color: #000000 
+}
+.nav-link i {
+  margin-right: 5px; 
+  font-size: 22px;
+  font-weight: 700;
+}
+.nav-link .bi {
+  margin-right: 5px;
+}
+
+
+
+
+
+.navbar-nav .nav-item:hover {
+  color: #7a1212; /* Color del texto al pasar el ratón */
+}
+
+.navbar-nav .nav-item.active {
+
+  color: #afafaf; /* Color del texto activo */
+}
+
+
+.dropdown-item .double-height {
+  line-height: 3; 
+}
+.dropdown-item{
+  color: #fff;
+  border-radius: 10px;
+}
+.dropdown-menu-custom {
+  border: 1px solid #b1b1b1;
+  border-radius: 10px;
+  background-color: #0047b1;
+  color: #fff;
+}
+
+.dropdown-menu {
+  margin-top: 10px;
+  padding: 0.5rem; 
+}
+
+.dropdown-item {
+  margin: 0; 
+}
+
+.dropdown-menu-center {
+  text-align: center;
+  max-width: none;
+}
+
+.dropdown-menu-center:before {
+  content: none;
+}
+
+.navbar-icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-alert {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2e2d2d;
+  color: #ffffff;
+  padding: 0.5rem;
+  font-size: 10px;
+  width: 150px;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-icon-container:hover .navbar-alert {
+  display: block;
+}
+
+
+.navbar-icon {
+  font-size: 24px;
+  color: #333e4b;
+  margin-right: 5px;
+}
+
+
+
+
+iframe {
+  width: 100%;
+  height: calc(100vh - 56px); /* Altura total de la ventana menos la altura del navbar */
+  border: none; /* Para quitar el borde del iframe si es necesario */
+}
+
+
