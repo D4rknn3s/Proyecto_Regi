@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{
+  font-family: 'century gothic', sans-serif;
+}
+/* Estilos para el contenedor principal */
+.wrapper{
+  background: #092852;
+  padding: 0 20px 0 20px;
+}
+/* Estilos para el contenido principal */
+.main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+/* Estilos para la fila */
+.row{
+  width:  900px;
+  height:550px;
+  border-radius: 10px;
+  background: #fff;
+  padding: 0px;
+  box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.2);
+  margin: 20px;
+}
+i{
+  font-weight: 400;
+  font-size: 15px;
+}
+/* Estilos para la caja de entrada (input-box) */
+.input-box{
+  width: 1150px;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 10px;
+  justify-content: space-around;
+}
+/* Estilos para el encabezado de la caja de entrada */
+.input-box header{
+  font-weight: 700;
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+/* Estilos para párrafos dentro de la caja de entrada */
+.input-box p{
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 45px;
+}
+/* Estilos para los campos de entrada */
+.input-field{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 0 10px 0 10px;
+}
+.input{
+  height: 45px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  outline: none;
+  margin-bottom: 20px;
+  color: #052659;
+}
+/* Estilos para las etiquetas de los campos de entrada */
+.input-box .input-field label{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  pointer-events: none;
+  transition: .5s;
+}
+/* Estilos para las etiquetas de los campos de entrada al enfocar o tener un valor válido */
+.input-field input:focus ~ label {
+  top: -10px;
+  font-size: 13px;
+}
+.input-field input:valid ~ label {
+  top: -10px;
+  font-size: 13px;
+  color: #052659;
+}
+/* Estilos para los campos de entrada al enfocar o tener un valor válido */
+.input-field .input:focus, .input-field .input:valid{
+  border-bottom: 1px solid #272727;
+}
+/* Estilos para el botón de envío */
+.submit {
+  border: none;
+  outline: none;
+  height: 45px;
+  background: #ececec;
+  border-radius: 5px;
+  transition: .4s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  color: #000;
+}
+
+.submit:hover {
+  background: #052659;
+  color: #fff;
+}
+/* Estilos para el texto de inicio de sesión */
+.signin{
+  text-align: center;
+  font-size: small;
+}
+/* Estilos para pantallas pequeñas */
+@media only screen and (max-width: 768px){
+  .side-image{
+    border-radius: 10px 10px 0 0;
+  }
+  .text{
+    position: absolute;
+    top: 70%;
+    text-align: center;
+  }
+  .text p, i{
+    font-size: 16px;
+  }
+  .row{
+    max-width:420px;
+    width: 100%;
+  }
+  /* Estilos adicionales para texto y botón en pantallas pequeñas */
+  .custom-button span {
+    font-size: 10px;
+    color: #052659;
+  }
+}
+/* Estilos para la línea divisoria */
+.divisor{
+  width: 100%;
+  height: 1px; 
+  background-color: #052659;
+  margin-bottom: 35px;
+}
+/* Estilos para el botón personalizado */
+.custom-button {
+  display: flex;
+  justify-content: center;
+  width: 100px;
+  height: 60px;
+}
+/* Estilos para el input de tipo archivo dentro del botón personalizado */
+.custom-button input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+}
+/* Estilos para la etiqueta dentro del botón personalizado */
+.custom-button label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+/* Estilos para la imagen dentro del botón personalizado */
+.custom-button img {
+  max-width: 100%;
+  height: 60%;
+  object-fit: cover;
+  margin-bottom: 0;
+}
+/* Estilos para el texto dentro del botón personalizado */
+.custom-button span {
+  font-size: 12px;
+  color: #000000;
+  margin-top: 1px;
+}
+
+#cancel-button {
+  text-decoration: none;
+}
+
