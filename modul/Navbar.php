@@ -45,7 +45,7 @@ session_start();
           <i class="bi bi-bar-chart-line"></i>Estadisticas
         </a>
         <div class="dropdown-menu dropdown-menu-custom " aria-labelledby="dropdownLeft2">
-          <a class="dropdown-item" href="../vistas/Pagos.php">Historial de pago</a>
+          <a class="dropdown-item" href="../vistas/Historial_pagos.php">Historial de pago</a>
           <a class="dropdown-item" href="../vistas/deudores.php">Deudores</a>
           <a class="dropdown-item" href="../vistas/graficos.php">Graficos</a>
         </div>

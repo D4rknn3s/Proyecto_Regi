@@ -5,7 +5,7 @@ if ($_POST) {
     $idusu = (isset($_POST['idusuario'])) ? $_POST['idusuario'] : "";
     $idserv = (isset($_POST['idservicio'])) ? $_POST['idservicio'] : "";
     $mont = (isset($_POST['monto'])) ? $_POST['monto'] : "";
-    $ref = (isset($_POST['referencia'])) ? $_POST['referencia'] : "";
+    $ref = (isset($_POST['no_registro_banco'])) ? $_POST['no_registro_banco'] : "";
     $c_depositar = (isset($_POST['cuenta_depositar'])) ? $_POST['cuenta_depositar'] : "";
     $fechapago = (isset($_POST['fecha_pago'])) ? $_POST['fecha_pago'] : "";
 
@@ -18,13 +18,13 @@ if ($_POST) {
     move_uploaded_file($rutaTemporal, $rutaDestino);
 
     // Preparar y ejecutar la consulta SQL para insertar los datos en la tabla de pagos
-    $sentencia = $conexion->prepare("INSERT INTO `pagos` (`idpago`, `idusuario`, `idservicio`, `monto`, `referencia`, `cuenta_depositar`, `fecha_pago`, `comprobante`) 
-        VALUES (NULL, :idusuario, :idservicio, :monto, :referencia , :cuenta_depositar, :fecha_pago, :comprobante)");
+    $sentencia = $conexion->prepare("INSERT INTO `pagos` (`idpago`, `idusuario`, `idservicio`, `monto`, `no_registro_banco`, `cuenta_depositar`, `fecha_pago`, `comprobante`) 
+        VALUES (NULL, :idusuario, :idservicio, :monto, :no_registro_banco , :cuenta_depositar, :fecha_pago, :comprobante)");
 
     $sentencia->bindParam(":idusuario", $idusu);
     $sentencia->bindParam(":idservicio", $idserv);
     $sentencia->bindParam(":monto", $mont);
-    $sentencia->bindParam(":referencia", $ref);
+    $sentencia->bindParam(":no_registro_banco", $ref);
     $sentencia->bindParam(":cuenta_depositar", $c_depositar);
     $sentencia->bindParam(":fecha_pago", $fechapago);
     $sentencia->bindParam(":comprobante", $rutaDestino); // Aquí guardamos la ruta del archivo en la base de datos
@@ -76,8 +76,8 @@ include '../modul/Navbar.php';
               </div>
 
               <div class="col-md-4 input-field">
-                <input type="number" class="input" id="referencia" name="referencia" required="">
-                <label for="referencia">No. de referencia</label>
+                <input type="text" class="input" id="no_registro_banco" name="no_registro_banco" required="">
+                <label for="no_registro_banco">No. Registro banco</label>
               </div>
 
               <div class="col-md-4 input-field">

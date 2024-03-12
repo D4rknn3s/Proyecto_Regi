@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{
+    font-family: 'century gothic', sans-serif;
+}
+body {
+  overflow-x: auto; /* o overflow-x: scroll; */
+}
+
+.btn-excel, .btn-pdf{
+  float: left;
+  margin: 3px;
+}
+
+
+
+.form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px;
+}
+    
+    .form-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3px;
+    }
+
+    .form-group label{
+      margin: 5px;
+    }
+
+    .form-control,
+    .btn {  
+      flex: 1;
+    }
+
+    .lineas {
+      text-align: center;
+      padding: 10px;
+      position: relative;
+    }
+    
+    .lineas::after {
+      content: "";
+      display: block;
+      border-bottom: 1px solid black; /* Puedes ajustar el estilo de la línea */
+      margin-top: 10px; /* Ajusta la distancia entre el texto y la línea */
+    }
+
+    
+
+
+      /*ESTILOS DE LA TABLA*/
+      .container{
+        background: #b9bbbd;
+        border-radius: 10px;
+        align-content: center;
+        margin-top: 25px;
+        
+      }
+      header{
+        text-align: center;
+        font-size: 25px;
+        color: #000000;
+        margin-top: 25px;
+        justify-content: center;
+      }
+      
+      .table{
+        margin-top: 25px;
+      }
+      .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      
+      .custom-table th, .custom-table td {
+        border: 1px solid #cacaca;
+        padding: 8px;
+        text-align: left;
+      }
+      
+      .custom-table th {
+        background-color: #f2f2f2;
+      }
+      
+      .custom-table th .scope{
+        text-align: center;
+      }     
+
+
+      /* Estilo personalizado para los labels de los buscadores */
+      .custom-search label {
+         color: #ffffff; 
+      }
+
+      .col-md-4.input-field input {
+    color: #000000; /* Cambia el color del texto a rojo (#FF0000) o el color que desees */
+    /* Agrega más estilos según sea necesario */
+}
+
+.modal-img{
+  width: 30px;
+  height: 30px;
+ }
+
+ .btn-no-pagado {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 768px) {
+
+  .modal-img{
+    width: 20px;
+    height: 20px;
+   }
+
+    .custom-table th, .custom-table td {
+        font-size: 80%; /* Ajusta el tamaño de fuente para pantallas más pequeñas */
+        /* Otros estilos según sea necesario */
+        
+    }
+    .btn-no-pagado {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.4rem;
+    }
+
+  
+}
+
+
