@@ -34,7 +34,7 @@ if ($_POST) {
     // Mostrar el mensaje de éxito
     echo '<div class="alert alert-success" role="alert">Pago agregado con éxito</div>';
 }
-include '../modul/Navbar.php';
+
 ?>
   <!-- Enlaces a estilos -->
   <link rel="stylesheet" href="StylesRegistro1.css">
@@ -109,7 +109,7 @@ include '../modul/Navbar.php';
                 </label>
               </div>
               <div class="col-md-4 input-field"><input type="submit" class="submit" value="Agregar pago"></div> 
-              <div class="col-md-4 input-field"><a href="../modul/Navbar.php" class="submit" id="cancel-button">Cancelar</a></div>
+              <div class="col-md-4 input-field"><a href="../Index" class="submit" id="cancel-button">Cancelar</a></div>
               <div class="divisor"></div>
             </div>
             </div>

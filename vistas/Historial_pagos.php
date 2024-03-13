@@ -1,6 +1,5 @@
 <?php
 include "../php/conexion2.php";
-include '../modul/Navbar.php';
 
 // Inicializamos las variables de búsqueda
 $search_query = "";
