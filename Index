@@ -50,9 +50,9 @@
           Estadisticas
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdownLeft2">
-          <a class="dropdown-item" href="./vistas/Historial_pagos.php" target="interfases">Historia de pago</a>
-          <a class="dropdown-item" href="./vistas/deudores.php" target="interfases">Deudores</a>
-          <a class="dropdown-item" href="./vistas/graficos.php" target="interfases">Graficos</a>
+          <a class="dropdown-item" href="./vistas/Historial_pagos.php" target="interfaces">Historia de pago</a>
+          <a class="dropdown-item" href="./vistas/deudores.php" target="interfaces">Deudores</a>
+          <a class="dropdown-item" href="./vistas/graficos.php" target="interfaces">Graficos</a>
         </div>
       </li>
 
