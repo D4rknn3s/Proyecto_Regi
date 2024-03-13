@@ -33,8 +33,8 @@
         </figure>
         <figure>
         <h2>Grafico de linea</h2>
-        <iframe src="../php/graficolinea1.php" width="10%" height="100%" frameborder="0"></iframe>
-        <iframe src="../php/graficolinea2.php" width="10%" height="100%" frameborder="0" ></iframe>
+        <iframe src="../php/graficolinea1.php" width="100%" height="54%" frameborder="0"></iframe>
+        <iframe src="../php/graficolinea2.php" width="100%" height="100%" frameborder="0" ></iframe>
         </figure>
     </section>
 
