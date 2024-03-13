@@ -2,6 +2,7 @@
 include("conexion.php");
 
         $nombre = $_POST['nombre'];
+        $apellido = $_POST['apellido'];
         $identidad_usuario = $_POST['identidad_usuario'];
         $direccion = $_POST['direccion'];
         $telefono = $_POST['telefono'];
@@ -9,6 +10,8 @@ include("conexion.php");
         $usuario = $_POST['usuario'];
         $pass = $_POST['pass'];
         $estado = 'Enable';
+        $rol = '2';
+        $cecha_regisro = date_default_timezone_get();
 
 
 //validaciones
@@ -69,14 +72,15 @@ if ($validacion_correo->num_rows > 0) {
                                         <?php
                                 } else  {
                                         $consulta = "INSERT INTO usuarios
-                                        (nombre_usuario, identidad_usuario, direccion_usuario, tele_usuario , correo_usuario, apodo_usuario, contra_usuario, habilitar_deshabilitar) 
+                                        (nombre_usuario, identidad_usuario, direccion_usuario, tele_usuario , correo_usuario, apodo_usuario, contra_usuario, habilitar_deshabilitar, apellido_usuario, idrol, registro_fecha) 
                                          VALUES 
-                                        ('$nombre','$identidad_usuario','$direccion','$telefono','$correo','$usuario','$pass', '$estado')";
+                                        ('$nombre','$identidad_usuario','$direccion','$telefono','$correo','$usuario','$pass', '$estado', '$apellido', '$rol', '$fecha_registro')";
 
                                          $resultado = mysqli_query($conexion,$consulta);
 
                                         if ($resultado) {
-                                                echo "Registrado correctamente, por favor ingrese el login para acceder al portal";
+                                                header("location: \proyecto\modul/Navbar.php");
+                                                exit;
                                         } else {
                                                 echo "error";
                                             }
