@@ -1,10 +1,5 @@
 //sistemas
 
-<?php
-session_start();
-    
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,13 +45,13 @@ session_start();
                     </div>
 
                     <div class="col-md-5 input-field">
-                        <input type="text" class="input" name="casa" required="" autocomplete="off">
-                        <label for="casa">No. de casa</label> 
+                        <input type="text" class="input" name="apellido" required="">
+                        <label for="casa">Apellido</label> 
                    </div>
 
                    <div class="col-md-5 input-field">
-                        <input type="text" class="input" name="cuadra" required="">
-                        <label for="cuadra">No. de cuadra</label>
+                        <input type="text" class="input" name="no.casa" required="">
+                        <label for="cuadra">No. casa</label>
                     </div>
 
                     <div class="col-md-5 input-field">
@@ -86,7 +81,7 @@ session_start();
                    </div> 
 
                    <div class="input-field signin">
-                    <span>¿Ya está registrado? <a href="http://localhost:8080/proyecto/Login/Login/Login.php">Iniciar Sesión</a></span>
+                    <span>¿Ya está registrado? <a href="http://localhost:8080/proyecto\Login.php">Iniciar Sesión</a></span>
                    </div>  
 
                    <div class="divisor"></Div>
