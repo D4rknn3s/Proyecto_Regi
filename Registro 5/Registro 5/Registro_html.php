@@ -1,5 +1,3 @@
-//sistemas
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,7 +79,7 @@
                    </div> 
 
                    <div class="input-field signin">
-                    <span>¿Ya está registrado? <a href="http://localhost:8080/proyecto\Login.php">Iniciar Sesión</a></span>
+                    <span>¿Ya está registrado? <a href="http://localhost/Proyecto_Regi-main/Login.php">Iniciar Sesión</a></span>
                    </div>  
 
                    <div class="divisor"></Div>

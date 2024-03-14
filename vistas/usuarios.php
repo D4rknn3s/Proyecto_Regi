@@ -1,6 +1,7 @@
 
 <?php
-session_start();
+session_start(); 
+include "../php/conexion2.php";
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +29,7 @@ session_start();
 
   <form class="form  ">
 
-        <div class="form-group">
+     <!--   <div class="form-group">
           <label for="date" class="form-label">Buscar por fecha</label>
           <input type="date" class="form-control form-control-sm" id="date" name="date" />
         </div>
@@ -41,7 +42,7 @@ session_start();
           </div>
         </div>
 
-  </form>
+  </form> -->
 
 
     <div class="container mt-4 botones">
@@ -160,8 +161,7 @@ session_start();
             <tbody>
               <tr class="celdas">
               <?php
-include '../php/conexion.php';
-
+include "../php/conexion.php";
 // Consulta para obtener los datos de los usuarios
 $sql = "SELECT u.idusuario, u.nombre_usuario, u.apellido_usuario, u.apodo_usuario, u.correo_usuario, u.tele_usuario, u.direccion_usuario, e.estado, r.nombre_rol
         FROM usuarios u

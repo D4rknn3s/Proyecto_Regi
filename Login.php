@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (mysqli_num_rows($result) == 1) {
         $_SESSION['usuarios'] = $correo;
-        header("location: modul/Navbar.php");
+        header("location:index.html");
         exit;
     } else {
         $error = "Correo electrónico o contraseña incorrectos";
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
             <div class="col-md-6 side-image">
 
-                <img src="assets/images/r2.png" alt=>
+                <img src="assets/images/r02.png" alt=>
 
                 <div class="text">
                     <p>Bienvenido<i></i></p>
@@ -83,10 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <span><a href="#">Ha olvidado su contraseña? </a></span>
                    </div>
                    <div class="signin">
-                    <span>Aún no tienes Cuenta? <a href="Registro1.php">Registrarse!!</a></span>
+                    <span>Aún no tienes Cuenta? <a href="http://localhost/Proyecto_Regi-main/Registro%205/Registro%205/registro_html.php">Registrarse!!</a> </span>
                    </div>
                 </div>  
-            </div>
+            </div
         </div>
     </div>
 </div>

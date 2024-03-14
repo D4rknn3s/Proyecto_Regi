@@ -2,5 +2,5 @@
  /*if($conexion){         echo'conectado a la base de datos exito';   
               
   }else{         echo 'no se pudo hacer la conexion';     }     */
-  ?>
+ 
  

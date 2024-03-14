@@ -1,6 +1,5 @@
 <?php
 include "../php/conexion2.php";
-include '../modul/Navbar.php';
 
 // Fetch data from the 'deudores' table with additional information
 $sql = "SELECT d.iddeudor, u.nombre_usuario, u.apodo_usuario,

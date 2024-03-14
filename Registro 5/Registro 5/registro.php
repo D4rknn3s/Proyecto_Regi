@@ -1,5 +1,5 @@
 <?php
-include("conexion.php");
+include("conexion_registro.php");
 
         $nombre = $_POST['nombre'];
         $apellido = $_POST['apellido'];
@@ -9,9 +9,8 @@ include("conexion.php");
         $correo = $_POST['correo'];
         $usuario = $_POST['usuario'];
         $pass = $_POST['pass'];
-        $estado = 'Enable';
         $rol = '2';
-        $cecha_regisro = date_default_timezone_get();
+        $token = '1';
 
 
 //validaciones
@@ -72,14 +71,14 @@ if ($validacion_correo->num_rows > 0) {
                                         <?php
                                 } else  {
                                         $consulta = "INSERT INTO usuarios
-                                        (nombre_usuario, identidad_usuario, direccion_usuario, tele_usuario , correo_usuario, apodo_usuario, contra_usuario, habilitar_deshabilitar, apellido_usuario, idrol, registro_fecha) 
+                                        (nombre_usuario, identidad_usuario, direccion_usuario, tele_usuario , correo_usuario, apodo_usuario, token, contra_usuario, apellido_usuario, idrol, fecha_ingreso) 
                                          VALUES 
-                                        ('$nombre','$identidad_usuario','$direccion','$telefono','$correo','$usuario','$pass', '$estado', '$apellido', '$rol', '$fecha_registro')";
+                                        ('$nombre','$identidad_usuario','$direccion','$telefono','$correo','$usuario', $token,'$pass', '$apellido', '$rol', now())";
 
                                          $resultado = mysqli_query($conexion,$consulta);
 
                                         if ($resultado) {
-                                                header("location: \proyecto\modul/Navbar.php");
+                                                header("location: ../Login.php");
                                                 exit;
                                         } else {
                                                 echo "error";
@@ -92,5 +91,3 @@ if ($validacion_correo->num_rows > 0) {
         }
          
  }       
-
-?>
