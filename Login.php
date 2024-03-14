@@ -13,12 +13,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Consulta SQL para verificar las credenciales
-    $query = "SELECT * FROM usuarios WHERE correo_usuario = '$correo' AND contra_usuario = '$contrasena'";
+    $query = "SELECT idusuario FROM usuarios WHERE correo_usuario = '$correo' AND contra_usuario = '$contrasena'";
     $result = mysqli_query($conexion, $query);
 
     if (mysqli_num_rows($result) == 1) {
-        $_SESSION['usuarios'] = $correo;
-        header("location:index.html");
+        // Si las credenciales son correctas, almacenar el ID de usuario en la sesión
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['idusuario'] = $row['idusuario'];
+        header("location: modul/Navbar.php");
         exit;
     } else {
         $error = "Correo electrónico o contraseña incorrectos";
@@ -83,10 +85,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <span><a href="#">Ha olvidado su contraseña? </a></span>
                    </div>
                    <div class="signin">
-                    <span>Aún no tienes Cuenta? <a href="http://localhost/Proyecto_Regi-main/Registro%205/Registro%205/registro_html.php">Registrarse!!</a> </span>
+                    <span>Aún no tienes Cuenta? <a href="http://localhost/Proyecto_Regi-main/Registro%205/Registro%205/registro_html.php">Registrarse!!</a></span>
                    </div>
                 </div>  
-            </div
+            </div>
         </div>
     </div>
 </div>
