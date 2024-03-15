@@ -25,6 +25,7 @@
                 <th scope="col">Costo</th>
                 <th scope="col">Fecha Inicial</th>
                 <th scope="col">Fecha Final</th>
+                <th scope="col">Agregar deudas</th>
                 <th scope="col">Habilitar/Deshabilitar</th>
                 </th>
             </tr>
@@ -38,6 +39,15 @@
                 <td><?php echo $registro['cost_servicio'];   ?> </td>
                 <td><?php echo $registro['fech_inicio'];   ?> </td>
                 <td><?php echo $registro['fech_final'];   ?> </td>
+                <td>
+                    <!--boton para agregar las deudas a todos los usuarios-->
+                    <?php 
+                         // Mostrar botón solo si el nombre del servicio no es "adelanto"
+                         if ($registro['nombre_servicio'] !== 'adelanto') {
+                             echo '<button onclick="crearDeuda(' . $registro['idservicio'] . ')">Crear Deuda</button>';
+                         }
+                     ?>
+                </td>
                 <td><?php echo $registro['hab_des'];   ?> </td>
             </tr>
             <?php } ?>
@@ -48,6 +58,8 @@
         </tbody>
     </table>
    </div>
+   <!--script que manda a llamar el js agregardeuda.js-->
+   <script src="../assets/js/agregardeuda.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
