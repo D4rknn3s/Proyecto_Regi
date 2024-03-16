@@ -183,3 +183,9 @@ i{
   text-decoration: none;
 }
 
+.label-above {
+  position: absolute;
+  top: -20px; /* Ajusta este valor según sea necesario para posicionar el texto más arriba */
+  left: 0;
+  pointer-events: none;
+}

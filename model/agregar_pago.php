@@ -36,6 +36,9 @@ if ($_POST) {
 }
 
 ?>
+  <!DOCTYPE html>
+<html lang="es">
+<head>
   <!-- Enlaces a estilos -->
   <link rel="stylesheet" href="StylesRegistro1.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
@@ -43,53 +46,52 @@ if ($_POST) {
   crossorigin="anonymous">
   <link rel="stylesheet" href="../assets/css/agregarpago.css">
   <title>Agregar pago</title>
-  <form action="" enctype="multipart/form-data" method="post">
-  </head>
-  <body>
+</head>
+<body>
   <div class="wrapper">
-        <div class="container main">
-            <div class="row g-3 input-box">  
-                <header>Agregar pago</header>
-            <div class="divisor"></div> 
+    <div class="container main">
+      <div class="row g-3 input-box">  
+        <header>Agregar pago</header>
+        <div class="divisor"></div> 
 
-            <div class="col-md-4 input-field">
-                  <input type="text" class="input" id="idusuario" name="idusuario" required="">
-                  <label for="idusuario">Id Usuario</label> 
-                </div>
+        <div class="col-md-4 input-field">
+          <input type="text" class="input" id="idusuario" name="idusuario" required="">
+          <label for="idusuario">Id Usuario</label> 
+        </div>
 
-            <div class="col-md-4 input-field">
-                <select class="input" id="idservicio" name="idservicio" required="">
-                <option value="">Seleccionar servicio</option>
+        <div class="col-md-4 input-field">
+          <select class="input" id="idservicio" name="idservicio" required="">
+            <option value="">Seleccionar servicio</option>
             <?php
             // Consulta para obtener los nombres de los servicios disponibles desde tu base de datos
-                $query_servicios = $conexion->query("SELECT * FROM servicios");
-                while ($servicio = $query_servicios->fetch(PDO::FETCH_ASSOC)) {
-              echo '<option value="' . $servicio['idservicio'] . '">' . $servicio['nombre_servicio'] . '</option>';
-              }
+            $query_servicios = $conexion->query("SELECT * FROM servicios");
+            while ($servicio = $query_servicios->fetch(PDO::FETCH_ASSOC)) {
+              echo '<option value="' . $servicio['idservicio'] . '" data-monto="' . $servicio['cost_servicio'] . '">' . $servicio['nombre_servicio'] . '</option>';
+            }
             ?>
-              </select>
-          </div>
+          </select>
+        </div>
 
-              <div class="col-md-4 input-field">
-                <input type="number" class="input" id="monto" name="monto" required="" autocomplete="off">
-                <label for="monto">Monto a pagar</label> 
-              </div>
+        <div class="col-md-4 input-field">
+          <div class="label-above">Monto a pagar</div>
+          <input type="number" class="input" id="monto" name="monto" required="" autocomplete="off" readonly>
+        </div>
 
-              <div class="col-md-4 input-field">
-                <input type="text" class="input" id="no_registro_banco" name="no_registro_banco" required="">
-                <label for="no_registro_banco">No. Registro banco</label>
-              </div>
+        <div class="col-md-4 input-field">
+          <input type="text" class="input" id="no_registro_banco" name="no_registro_banco" required="">
+          <label for="no_registro_banco">No. Registro banco</label>
+        </div>
 
-              <div class="col-md-4 input-field">
-                <input type="number" class="input" id="cuenta_depositar" name="cuenta_depositar" required="" autocomplete="off">
-                <label for="cuenta_depositar">No. cuenta a depositar</label> 
-              </div>
+        <div class="col-md-4 input-field">
+          <input type="number" class="input" id="cuenta_depositar" name="cuenta_depositar" required="" autocomplete="off">
+          <label for="cuenta_depositar">No. cuenta a depositar</label> 
+        </div>
 
-              <div class="col-md-4 input-field">
-                  <input type="date" class="input" id="fecha_pago" name="fecha_pago" required>
-                  <label for="fecha_pago" style="position: absolute; top: -20px;">Seleccionar fecha</label>
-                <style>
-              #fecha_pago::-webkit-datetime-edit, #fecha_pago::-webkit-inner-spin-button, #fecha_pago::-webkit-clear-button {
+        <div class="col-md-4 input-field">
+          <input type="date" class="input" id="fecha_pago" name="fecha_pago" required>
+          <label for="fecha_pago" style="position: absolute; top: -20px;">Seleccionar fecha</label>
+          <style>
+            #fecha_pago::-webkit-datetime-edit, #fecha_pago::-webkit-inner-spin-button, #fecha_pago::-webkit-clear-button {
               display: none;
               margin: 0;
               padding: 0;
@@ -97,23 +99,32 @@ if ($_POST) {
               border: none;
               color: transparent;
               appearance: none;
-              }
-            </style>
-          </div>
+            }
+          </style>
+        </div>
 
-            <div class="custom-button">
-                <input type="file" id="inputImagen" name="inputImagen" accept="image/*">
-                <label for="inputImagen">
-                    <img src="../assets/images/foto.png" alt="Subir Imagen">
-                    <span>Subir Comprobante</span>
-                </label>
-              </div>
-              <div class="col-md-4 input-field"><input type="submit" class="submit" value="Agregar pago"></div> 
-              <div class="col-md-4 input-field"><a href="../Index" class="submit" id="cancel-button">Cancelar</a></div>
-              <div class="divisor"></div>
-            </div>
-            </div>
+        <div class="custom-button">
+          <input type="file" id="inputImagen" name="inputImagen" accept="image/*">
+          <label for="inputImagen">
+            <img src="../assets/images/foto.png" alt="Subir Imagen">
+            <span>Subir Comprobante</span>
+          </label>
+        </div>
+        <div class="col-md-4 input-field"><input type="submit" class="submit" value="Agregar pago"></div> 
+        <div class="col-md-4 input-field"><a href="../Index" class="submit" id="cancel-button">Cancelar</a></div>
+        <div class="divisor"></div>
+      </div>
     </div>
-  </body>
-  </form>
+  </div>
+
+  <!-- Script de JavaScript -->
+  <script>
+    document.getElementById('idservicio').addEventListener('change', function() {
+      // Obtener el monto asociado al servicio seleccionado
+      var montoSeleccionado = parseFloat(this.options[this.selectedIndex].getAttribute('data-monto'));
+      // Actualizar el valor del campo de monto a pagar
+      document.getElementById('monto').value = montoSeleccionado.toFixed(2); // Mostrar el monto con dos decimales
+    });
+  </script>
+</body>
 </html>
