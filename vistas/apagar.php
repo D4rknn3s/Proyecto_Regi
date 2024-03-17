@@ -52,16 +52,14 @@ $lista_servicios=$sentencia-> fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $registro['fech_final'];   ?> </td>
                 <td><?php echo $registro['actualizado_por'];   ?> </td>
                 <td>
-                 
                 <a
                     name=""
                     id=""
-                     class=" btn btn-success bi bi-wallet2 "
-                    href="../model/agregar_pago.php"
+                    class="btn btn-success bi bi-wallet2"
+                    href="../model/agregar_pago.php?servicio=<?php echo urlencode($registro['nombre_servicio']); ?>&monto=<?php echo $registro['cost_servicio']; ?>&idservicio=<?php echo $registro['idservicio']; ?>"
                     target="interfaces"
                     role="button"
-                    ></a> 
-                 
+                ></a>
                 </td>
             </tr>
             <?php } ?>
