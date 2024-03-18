@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Adelantos</title>
     <link rel="stylesheet" href="../assets/css/deudoressty.css">
 </head>
@@ -13,6 +14,7 @@
         <div class="lineas"></div>
     </div>
 
+    
     <!-- buscadores -->
     <div class="container mt-4">
         <form class="form" id="searchForm">
@@ -25,6 +27,7 @@
                 <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" />
             </div>
         </form>
+        
 
         <!-- botones de excel y pdf -->
         <div class="row">
@@ -32,6 +35,7 @@
                 <header class="header-table text-start">
                     <a href="" class="btn btn-excel" style="background-color: #228427; color: #fff; border: transparent;">Excel</a>
                     <a href="" class="btn btn-pdf" style="background-color: #5f1017; color: #fff; border: transparent;">PDF</a>
+                    <button id="boton" style="background-color: #5f1017; color: #fff; border: transparent;">Activar adelantos</button>
                 </header>
             </div>
         </div>
@@ -54,5 +58,19 @@
     </div>
 
     <script src="../assets/js/buscadoresAdelanto.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#boton").click(function(){
+            $.ajax({ 
+                type: "POST",
+                url: "../php/ActivarAdelanto.php",
+                success: function(response){
+                    alert("¡Se han activado los adelantos que dicen pagado!");
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
+
