@@ -3,12 +3,13 @@
 include "../php/conexion2.php";
 
 // Definir una variable para almacenar la consulta SQL inicial
-$sql = "SELECT d.iddeudor, u.nombre_usuario, u.apodo_usuario,
+$sql = "SELECT d.iddeudor, u.idusuario, u.nombre_usuario, u.apodo_usuario,
                CASE WHEN s.nombre_servicio = 'adelanto' THEN 'Adelanto' ELSE s.nombre_servicio END AS nombre_servicio,
                s.desc_servicio, d.monto_pendiente, d.fecha_deuda
         FROM deudores d
         JOIN usuarios u ON d.idusuario = u.idusuario
         LEFT JOIN servicios s ON d.idservicio = s.idservicio";
+
 
 // Definir arreglos para almacenar las condiciones de búsqueda y los valores de los parámetros
 $condiciones = array();
