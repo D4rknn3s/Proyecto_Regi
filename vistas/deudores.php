@@ -53,7 +53,6 @@
             <table class="table custom-table table-hover" id="resultsTable">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-center">#</th>
                     <th scope="col" class="text-center">Nombre</th>
                     <th scope="col" class="text-center">Usuario</th>
                     <th scope="col" class="text-center">Tipo de servicio</th>
@@ -70,12 +69,7 @@
     </div>
 
     <script src="../assets/js/buscadoresdeuda.js"></script>
-    <script>
-        // Función para cargar todos los datos de la tabla al cargar la página
-        document.addEventListener('DOMContentLoaded', function () {
-            searchAndUpdateResults('', '../php/buscadoresDeuda.php');
-        });
-    </script>
+
 </body>
 </html>
 
