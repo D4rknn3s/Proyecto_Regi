@@ -103,7 +103,6 @@ $lista_pagos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-12">
         <header class="header-table text-start">
         <a href="../php/generar_pdf_Pagos.php" class="btn btn-excel" style="background-color: #228427; color: #fff; border: transparent;">PDF</a>
-        <a href="?excel=1" class="btn btn-pdf" style="background-color: #5f1017; color: #fff; border: transparent;">Excel</a>
         </header>
     </div>
     </div>
