@@ -81,6 +81,7 @@ create table pagos(
 idpago bigint primary key auto_increment,
 idusuario bigint,
 idservicio bigint,
+iddeudor bigint,
 fecha_pago date not null,
 no_registro_banco varchar (20) not null,
 comprobante VARCHAR(255) not null,
@@ -89,18 +90,6 @@ cuenta_depositar int(20) not null,
 foreign key (idusuario) references Usuarios (idusuario) on delete cascade,
 foreign key (idservicio) references servicios (idservicio) on delete cascade
 )engine=InnoDB character set utf8 collate utf8_unicode_ci;
-
-
-/*proceso para crear un estado al agregar un pago*/
-DELIMITER //
-CREATE TRIGGER after_insert_pago
-AFTER INSERT ON pagos
-FOR EACH ROW
-BEGIN
-    INSERT INTO estadoscuenta (idpago, desc_estado) VALUES (NEW.idpago, 'No pagado');
-END;
-//
-DELIMITER ;
 
 create table estadoscuenta(
 idestado bigint primary key auto_increment,
@@ -133,6 +122,7 @@ CREATE TABLE deudores (
     idusuario BIGINT,
     idservicio BIGINT,
     monto_pendiente INT NOT NULL,
+    fecha_deuda Date not null,
     FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario) ON DELETE CASCADE,
     FOREIGN KEY (idservicio) REFERENCES servicios (idservicio) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
@@ -233,9 +223,9 @@ correo_usuario=correo_usuario, tele_usuario=tele_usuario, direccion_usuario=dire
  apodo_usuario=apodo_usuario, token=token, intento_fallidos=intento_fallidos WHERE id=idusuario;
 end$$
 
-/*/////////////////////////////////////////////////////////////////////////////*/
+
+DELIMITER $$
 /*porceso para eliminar los datos del deudor despues del pago*/
-DELIMITER //
 CREATE PROCEDURE EliminarDeudoresPagado()
 BEGIN
     DECLARE done INT DEFAULT FALSE;
@@ -262,37 +252,39 @@ BEGIN
 
         -- Eliminar deudores que coincidan con el idpago_temp y el idusuario de pagos
         DELETE FROM deudores
-        WHERE idusuario IN (SELECT idusuario FROM pagos WHERE idpago = idpago_temp)
-        AND idservicio IN (SELECT idservicio FROM pagos WHERE idpago = idpago_temp);
+        WHERE iddeudor IN (SELECT iddeudor FROM pagos WHERE idpago = idpago_temp)
+        AND iddeudor = (SELECT iddeudor FROM pagos WHERE idpago = idpago_temp);
     END LOOP;
 
     CLOSE cur;
-END//
+END$$
 
+
+DELIMITER $$
 /*activa automaticamente el proceso*/
-DELIMITER //
 CREATE EVENT eliminar_deudores
 ON SCHEDULE EVERY 10 SECOND
 DO
     CALL EliminarDeudoresPagado();
-//
+END$$
 
 DELIMITER //
 SET GLOBAL event_scheduler = ON;
 //
 
-/*///////////////////////////////////////////*/
+
+delimiter $$
 /*porceso de almacenado para guardar los datos del adelanto*/
-DELIMITER //
 CREATE PROCEDURE InsertarAdelanto(IN p_idpago BIGINT)
 BEGIN
     DECLARE servicio_id BIGINT;
     DECLARE monto_pago INT;
     DECLARE servicio_nombre VARCHAR(30);
-
+    DECLARE fecha_pag date;
+    
     -- Obtener el id de servicio, el monto de pago y el nombre del servicio
-    SELECT servicios.idservicio, monto, nombre_servicio
-    INTO servicio_id, monto_pago, servicio_nombre
+    SELECT servicios.idservicio, monto, nombre_servicio, fecha_pago
+    INTO servicio_id, monto_pago, servicio_nombre, fecha_pag
     FROM pagos
     JOIN servicios ON pagos.idservicio = servicios.idservicio
     WHERE pagos.idpago = p_idpago;
@@ -302,50 +294,53 @@ BEGIN
         INSERT INTO adelantos (idusuario, idpagos, monto_total, monto_restante, fecha_adelanto)
         VALUES (
             (SELECT idusuario FROM pagos WHERE idpago = p_idpago),
-            p_idpago,
-            monto_pago,
-            monto_pago,
-            CURRENT_DATE
+            p_idpago, monto_pago, monto_pago, fecha_pag
         );
     END IF;
-END//
+END $$
 
 
-DELIMITER //
+DELIMITER $$
 /*trigger de insertar pago en adelantos*/
 CREATE TRIGGER insert_adelanto
 AFTER INSERT
 ON pagos FOR EACH ROW
 BEGIN
     CALL InsertarAdelanto(NEW.idpago);
-END//
+END$$
 
-/*///////////////////////////////////////////*/
-DELIMITER //
-/*proceso de almacenado para insertar la deudapor cada usuario*/
+
+
+DELIMITER $$
+/*proceso para insertar los pagos en usuarios en deudas*/
 CREATE PROCEDURE CrearDeuda(IN p_idservicio BIGINT)
 BEGIN
     DECLARE monto_pendiente INT;
+    DECLARE fecha_inicio DATE;
 
-    -- Obtener el monto del servicio y la descripción
-    SELECT cost_servicio
-    INTO monto_pendiente
+    -- Obtener el monto del servicio y la fecha de inicio
+    SELECT cost_servicio, fech_inicio
+    INTO monto_pendiente, fecha_inicio
     FROM servicios
     WHERE idservicio = p_idservicio;
 
     -- Insertar en la tabla deuda solo si el nombre del servicio no es "adelanto"
     IF (SELECT nombre_servicio FROM servicios WHERE idservicio = p_idservicio) <> 'adelanto' THEN
-        INSERT INTO deudores (idusuario, idservicio, monto_pendiente)
-        SELECT idusuario, p_idservicio, monto_pendiente
+        INSERT INTO deudores (idusuario, idservicio, monto_pendiente, fecha_deuda)
+        SELECT idusuario, p_idservicio, monto_pendiente, fecha_inicio
         FROM usuarios;
     END IF;
 
-END //
+END $$
 
-DELIMITER //
-CREATE TRIGGER insert_deuda
+
+DELIMITER $$
+/*al crear un pago inserta el idpago, y escribe en desc_estado no pagado*/
+CREATE TRIGGER insert_pago_estado
 AFTER INSERT
-ON servicios FOR EACH ROW
+ON pagos FOR EACH ROW
+
 BEGIN
-    CALL CrearDeuda(NEW.idservicio);
-END //
+    INSERT INTO estadoscuenta (idpago, desc_estado)
+    VALUES (NEW.idpago, 'No Pagado');
+END$$
