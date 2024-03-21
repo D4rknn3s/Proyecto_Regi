@@ -1,5 +1,6 @@
 <?php
 include "../php/conexion2.php";
+include "../libreria/TCPDF-main/tcpdf.php";
 
 // Inicializamos las variables de búsqueda
 $search_query = "";
@@ -16,24 +17,33 @@ if (isset($_GET['Buscar'])) {
 }
 
 // Preparamos la consulta SQL con las cláusulas WHERE opcionales para la búsqueda
-$sql = "SELECT pagos.idpago, usuarios.idusuario, usuarios.nombre_usuario, apellido_usuario, Servicios.idservicio, Servicios.nombre_servicio, pagos.monto, pagos.no_registro_banco, pagos.cuenta_depositar, pagos.fecha_pago, pagos.comprobante
+$sql = "SELECT pagos.idpago, 
+            pagos.idusuario, 
+            usuarios.nombre_usuario, 
+            usuarios.apellido_usuario, 
+            pagos.idservicio, 
+            Servicios.nombre_servicio, 
+            pagos.monto, 
+            pagos.no_registro_banco, 
+            pagos.cuenta_depositar, 
+            pagos.fecha_pago, 
+            pagos.comprobante
         FROM pagos
         INNER JOIN usuarios ON pagos.idusuario = usuarios.idusuario
-        INNER JOIN Servicios ON pagos.idservicio = servicios.idservicio
+        INNER JOIN Servicios ON pagos.idservicio = Servicios.idservicio
         WHERE 1=1"; // Iniciamos con una condición siempre verdadera para simplificar la construcción de la consulta
+        
+        // Agregamos la condición de fecha si se ha especificado
+        if (!empty($date_query)) {
+        $sql .= " AND DATE(pagos.fecha_pago) = :fecha_pago";
+        }
 
-// Agregamos condiciones a la consulta si se han especificado términos de búsqueda
-if (!empty($date_query)) {
-    // Agregamos la condición de fecha si se ha especificado
-    $sql .= " AND DATE(pagos.fecha_pago) = :fecha_pago";
-}
-
-if (!empty($search_query)) {
-    // Agregamos la condición de búsqueda por término si se ha especificado
-    $sql .= " AND (
+        if (!empty($search_query)) {
+        // Agregamos la condición de búsqueda por término si se ha especificado
+        $sql .= " AND (
             pagos.idpago = :search_query OR
             pagos.no_registro_banco = :search_query)";
-}
+        }
 
 // Preparamos y ejecutamos la consulta
 $sentencia = $conexion->prepare($sql);
@@ -79,26 +89,26 @@ $lista_pagos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
        <div class="form-group">
          <label for="date" class="form-label">Buscar por fecha</label>
          <input type="date" class="form-control form-control-sm" id="date" name="date">
-       </div>
-       <div class="form-group">
-         <label for="nombre" class="form-label"></label>
-         <input type="text" class="form-control form-control-sm" placeholder="Buscar" id="buscar" name="Buscar">
-         <div class="form-group">
+        </div>
+    <div class="form-group">
+        <label for="nombre" class="form-label"></label>
+        <input type="text" class="form-control form-control-sm" placeholder="Buscar" id="buscar" name="Buscar">
+        <div class="form-group">
             <button type="submit" class="btn btn-primary">Buscar</button>
-         </div>
-       </div>
-     </form> 
-           <!-- botones de excel y pdf -->
-           <div class="row">
-       <div class="col-12">
-         <header class="header-table text-start">
-            <a href="" class="btn btn-excel" style="background-color: #228427; color: #fff; border: transparent;">Excel</a>
-            <a href="" class="btn btn-pdf" style="background-color: #5f1017; color: #fff; border: transparent;">PDF</a>
-         </header>
-       </div>
-     </div>
-     <div class="table-responsive">
-       <table class="table custom-table table-hover">
+        </div>
+        </div>
+    </form> 
+        <!-- botones de excel y pdf -->
+        <div class="row">
+    <div class="col-12">
+        <header class="header-table text-start">
+        <a href="../php/generar_pdf_Pagos.php" class="btn btn-excel" style="background-color: #228427; color: #fff; border: transparent;">PDF</a>
+        <a href="?excel=1" class="btn btn-pdf" style="background-color: #5f1017; color: #fff; border: transparent;">Excel</a>
+        </header>
+    </div>
+    </div>
+    <div class="table-responsive">
+    <table class="table custom-table table-hover">
                 <thead>
                     <tr>
                         <th scope="col" class="text-center">#</th>
@@ -131,7 +141,7 @@ $lista_pagos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             <td><?php echo $registro['fecha_pago']; ?></td>
                             <td><button type="button" class="btn btn-link" data-toggle="modal" data-target="#imagenModal">
                             <img src="<?php echo $registro['comprobante']; ?>" class="modal-img btn-ver-imagen" data-toggle="modal" data-target="#imagenModal" style="max-width: 100px; max-height: 100px;">
-                            <td><button class="btn btn-sm btn-toggle btn-danger btn-no-pagado" data-toggle="Nopago" data-id="1">No pagado</button></td>
+                            <td><button class="btn btn-sm btn-toggle btn-danger btn-no-pagado" data-toggle="Nopago" data-id="<?php echo $registro['idpago']; ?>">No pagado</button></td>
                             <td><button type="button" class="btn btn-primary btn-notificar btn-sm" data-id="<?php echo $registro['idpago']; ?>">Notificar</button></td>
                         </tr>
                     <?php } ?>
@@ -181,7 +191,7 @@ $lista_pagos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
               var dataId = button.getAttribute('data-id');
 
               // Envía la información al servidor mediante una solicitud HTTP (puedes usar Fetch API o jQuery.ajax)
-              fetch('actualizar_estado.php', {
+              fetch('../php/actualizar_estado.php', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
@@ -195,6 +205,11 @@ $lista_pagos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
               .then(data => {
                   // Maneja la respuesta del servidor si es necesario
                   console.log(data);
+
+                  // Muestra un mensaje de éxito si la solicitud se procesa correctamente
+                  if (data.success) {
+                      alert('¡Pago aprobado con éxito!');
+                  }
               })
               .catch(error => {
                   console.error('Error al enviar la solicitud:', error);

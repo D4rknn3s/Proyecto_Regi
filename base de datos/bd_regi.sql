@@ -1,27 +1,6 @@
 Create database BD_REGI;
 USE BD_REGI;
 
-create table usuarios(
-idusuario bigint primary key auto_increment,
-idrol bigint,
-idestado bigint,
-nombre_usuario varchar (30) not null,
-contra_usuario varchar (20) not null,
-correo_usuario varchar (30) not null,
-tele_usuario varchar (30) not null,
-direccion_usuario varchar (30) not null,
-apellido_usuario varchar (30) not null,
-identidad_usuario varchar (20) not null,
-apodo_usuario varchar (20) not null,
-token varchar (120) not null ,
-intento_fallidos int (20),
-fecha_ingreso datetime not null,
-foreign key (idrol) references roles (idrol) on delete cascade,
-foreign key (idestado) references estados (idestado) on delete cascade
-)engine=InnoDB
-character set utf8
-collate utf8_unicode_ci; 
-
 create table roles (
 idrol bigint primary key auto_increment,
 nombre_rol varchar (30) ,
@@ -66,6 +45,27 @@ foreign key (idrol) references Roles (idrol) on delete cascade
 character set utf8
 collate utf8_unicode_ci;
 
+create table usuarios(
+idusuario bigint primary key auto_increment,
+idrol bigint,
+idestado bigint,
+nombre_usuario varchar (30) not null,
+contra_usuario varchar (20) not null,
+correo_usuario varchar (30) not null,
+tele_usuario varchar (30) not null,
+direccion_usuario varchar (30) not null,
+apellido_usuario varchar (30) not null,
+identidad_usuario varchar (20) not null,
+apodo_usuario varchar (20) not null,
+token varchar (120) not null ,
+intento_fallidos int (20),
+fecha_ingreso datetime not null,
+foreign key (idrol) references roles (idrol) on delete cascade,
+foreign key (idestado) references estados (idestado) on delete cascade
+)engine=InnoDB
+character set utf8
+collate utf8_unicode_ci; 
+
 /*Servicios */
 Create table Servicios(
 idservicio bigint primary key auto_increment,
@@ -90,6 +90,18 @@ foreign key (idusuario) references Usuarios (idusuario) on delete cascade,
 foreign key (idservicio) references servicios (idservicio) on delete cascade
 )engine=InnoDB character set utf8 collate utf8_unicode_ci;
 
+
+/*proceso para crear un estado al agregar un pago*/
+DELIMITER //
+CREATE TRIGGER after_insert_pago
+AFTER INSERT ON pagos
+FOR EACH ROW
+BEGIN
+    INSERT INTO estadoscuenta (idpago, desc_estado) VALUES (NEW.idpago, 'No pagado');
+END;
+//
+DELIMITER ;
+
 create table estadoscuenta(
 idestado bigint primary key auto_increment,
 idpago bigint,
@@ -104,6 +116,26 @@ idestado bigint,
 foreign key (idpago) references pagos (idpago) on delete cascade,
 foreign key (idestado) references estadoscuenta(idestado) on delete cascade
 )engine=InnoDB character set utf8 collate utf8_unicode_ci;
+
+CREATE TABLE adelantos (
+    idadelanto BIGINT PRIMARY KEY AUTO_INCREMENT,
+    idusuario BIGINT,
+    idpagos BIGINT,
+    monto_total INT(20) NOT NULL,
+    monto_restante INT(20) NOT NULL,
+    fecha_adelanto DATE NOT NULL,
+    FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario) ON DELETE CASCADE,
+    FOREIGN KEY (idpagos) REFERENCES pagos (idpago) ON DELETE CASCADE
+) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+CREATE TABLE deudores (
+    iddeudor BIGINT PRIMARY KEY AUTO_INCREMENT,
+    idusuario BIGINT,
+    idservicio BIGINT,
+    monto_pendiente INT NOT NULL,
+    FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario) ON DELETE CASCADE,
+    FOREIGN KEY (idservicio) REFERENCES servicios (idservicio) ON DELETE CASCADE
+) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 /* Notificaciones */
 create table tipo_notificacion (
@@ -136,28 +168,73 @@ fec_publicacion date,
 foreign key (idusuario) references usuarios (idusuario) on delete cascade
 )engine=InnoDB character set utf8 collate utf8_unicode_ci;
 
-CREATE TABLE adelantos (
-    idadelanto BIGINT PRIMARY KEY AUTO_INCREMENT,
-    idusuario BIGINT,
-    idpagos BIGINT,
-    monto_total INT(20) NOT NULL,
-    monto_restante INT(20) NOT NULL,
-    fecha_adelanto DATE NOT NULL,
-    FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario) ON DELETE CASCADE,
-    FOREIGN KEY (idpagos) REFERENCES pagos (idpago) ON DELETE CASCADE
-) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-CREATE TABLE deudores (
-    iddeudor BIGINT PRIMARY KEY AUTO_INCREMENT,
-    idusuario BIGINT,
-    idservicio BIGINT,
-    monto_pendiente INT NOT NULL,
-    FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario) ON DELETE CASCADE,
-    FOREIGN KEY (idservicio) REFERENCES servicios (idservicio) ON DELETE CASCADE
-) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+/*Procedimientos Almacenados */
+
+/* Ver Usuarios*/
+delimiter $$
+create procedure VerUsuario ()
+begin 
+select*from usuarios;
+end$$
+/*Nuevo Usuario*/
+delimiter $$
+Create procedure NuevoUsuario(
+in idrol bigint,
+in idestado bigint,
+in nombre_usuario varchar (30),
+in contra_usuario varchar (20),
+in correo_usuario varchar (30),
+in tele_usuario varchar (30),
+in direccion_usuario varchar (30),
+in apellido_usuario varchar (30),
+in identidad_usuario varchar (20),
+in apodo_usuario varchar (20),
+in token varchar (120) ,
+in intento_fallidos int (20),
+in fecha_ingreso datetime
+)
+begin 
+INSERT INTO usuarios (idrol, idestado, nombre_usuario, contra_usuario, 
+correo_usuario, tele_usuario, direccion_usuario, apellido_usuario,identidad_usuario,
+ apodo_usuario, token, intento_fallidos,fecha_ingreso)
+values (idrol, idestado, nombre_usuario, contra_usuario, 
+correo_usuario, tele_usuario, direccion_usuario, apellido_usuario,identidad_usuario,
+ apodo_usuario, token, intento_fallidos,fecha_ingreso);
+ end$$
+ 
+/*Eliminar Usuarios*/
+delimiter $$ 
+create procedure EliminarUsuario( in id bigint)
+begin 
+delete from usuarios where id= idusuario;
+end$$
+
+/*Actualizar Usuario*/
+delimiter $$
+Create procedure ActualizarUsuarios(
+in id bigint,
+in idrol bigint,
+in idestado bigint,
+in nombre_usuario varchar (30),
+in contra_usuario varchar (20),
+in correo_usuario varchar (30),
+in tele_usuario varchar (30),
+in direccion_usuario varchar (30),
+in apellido_usuario varchar (30),
+in identidad_usuario varchar (20),
+in apodo_usuario varchar (20),
+in token varchar (120) ,
+in intento_fallidos int (20)
+)
+begin 
+UPDATE usuarios SET idrol=idrol, idestado=idestado, nombre_usuario=nombre_usuario, contra_usuario=contra_usuario, 
+correo_usuario=correo_usuario, tele_usuario=tele_usuario, direccion_usuario=direccion_usuario, apellido_usuario=apellido_usuario,identidad_usuario=identidad_usuario,
+ apodo_usuario=apodo_usuario, token=token, intento_fallidos=intento_fallidos WHERE id=idusuario;
+end$$
 
 /*/////////////////////////////////////////////////////////////////////////////*/
-/*proceso para eliminar los datos del deudor despues del pago*/
+/*porceso para eliminar los datos del deudor despues del pago*/
 DELIMITER //
 CREATE PROCEDURE EliminarDeudoresPagado()
 BEGIN
@@ -272,79 +349,3 @@ ON servicios FOR EACH ROW
 BEGIN
     CALL CrearDeuda(NEW.idservicio);
 END //
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*Procedimientos Almacenados */
-
-/* Ver Usuarios*/
-delimiter $$
-create procedure VerUsuario ()
-begin 
-select*from usuarios;
-end$$
-/*Nuevo Usuario*/
-delimiter $$
-Create procedure NuevoUsuario(
-in idrol bigint,
-in idestado bigint,
-in nombre_usuario varchar (30),
-in contra_usuario varchar (20),
-in correo_usuario varchar (30),
-in tele_usuario varchar (30),
-in direccion_usuario varchar (30),
-in apellido_usuario varchar (30),
-in identidad_usuario varchar (20),
-in apodo_usuario varchar (20),
-in token varchar (120) ,
-in intento_fallidos int (20),
-in fecha_ingreso datetime
-)
-begin 
-INSERT INTO usuarios (idrol, idestado, nombre_usuario, contra_usuario, 
-correo_usuario, tele_usuario, direccion_usuario, apellido_usuario,identidad_usuario,
- apodo_usuario, token, intento_fallidos,fecha_ingreso)
-values (idrol, idestado, nombre_usuario, contra_usuario, 
-correo_usuario, tele_usuario, direccion_usuario, apellido_usuario,identidad_usuario,
- apodo_usuario, token, intento_fallidos,fecha_ingreso);
- end$$
- 
-/*Eliminar Usuarios*/
-delimiter $$ 
-create procedure EliminarUsuario( in id bigint)
-begin 
-delete from usuarios where id= idusuario;
-end$$
-
-/*Actualizar Usuario*/
-delimiter $$
-Create procedure ActualizarUsuarios(
-in id bigint,
-in idrol bigint,
-in idestado bigint,
-in nombre_usuario varchar (30),
-in contra_usuario varchar (20),
-in correo_usuario varchar (30),
-in tele_usuario varchar (30),
-in direccion_usuario varchar (30),
-in apellido_usuario varchar (30),
-in identidad_usuario varchar (20),
-in apodo_usuario varchar (20),
-in token varchar (120) ,
-in intento_fallidos int (20)
-)
-begin 
-UPDATE usuarios SET idrol=idrol, idestado=idestado, nombre_usuario=nombre_usuario, contra_usuario=contra_usuario, 
-correo_usuario=correo_usuario, tele_usuario=tele_usuario, direccion_usuario=direccion_usuario, apellido_usuario=apellido_usuario,identidad_usuario=identidad_usuario,
- apodo_usuario=apodo_usuario, token=token, intento_fallidos=intento_fallidos WHERE id=idusuario;
-end$$
