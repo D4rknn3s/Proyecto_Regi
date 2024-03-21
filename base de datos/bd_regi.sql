@@ -109,11 +109,13 @@ foreign key (idestado) references estadoscuenta(idestado) on delete cascade
 CREATE TABLE adelantos (
     idadelanto BIGINT PRIMARY KEY AUTO_INCREMENT,
     idusuario BIGINT,
+    idservicio BIGINT,
     idpagos BIGINT,
     monto_total INT(20) NOT NULL,
     monto_restante INT(20) NOT NULL,
     fecha_adelanto DATE NOT NULL,
     FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario) ON DELETE CASCADE,
+    FOREIGN KEY (idservicio) REFERENCES Servicios (idservicio) ON DELETE CASCADE,
     FOREIGN KEY (idpagos) REFERENCES pagos (idpago) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
